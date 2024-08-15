@@ -2,11 +2,12 @@ const express=require("express")
 const mongoose=require("mongoose")
 const server_config=require("./config/server.configs")
 const db_config=require("./config/db.configs")
-const userSchema=require("./modules/user.module")
-
+const userSchema=require("./models/user.model")
 
 const app=express()
+app.use(express.json())
 mongoose.connect(db_config.DB_url)
+
 const db=mongoose.connection
 
 db.on("error",()=>
@@ -23,7 +24,7 @@ async function init()
     
     try {
         const data= await userSchema.find({user_type:"administrator"})
-        if(data)
+        if(!data)
             {
                 console.log(data)
             }
@@ -45,6 +46,9 @@ async function init()
     }
    
 }
+
+require("./routes/auth.routes")(app)
+
 app.listen(server_config.port,()=>
 {
     console.log("Server is connected");
