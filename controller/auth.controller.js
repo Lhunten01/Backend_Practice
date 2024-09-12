@@ -2,6 +2,7 @@ const mongoose=require("mongoose")
 const bcrypt=require("bcryptjs")
 const jwt=require("jsonwebtoken")
 const userSchema=require("../models/user.model")
+const secret=require("../config/secret.configs")
 module.exports.signup=async (req,res)=>
 { 
   const req_body=req.body
@@ -47,7 +48,7 @@ module.exports.signin=async(req,res)=>
         {
         return  res.status(200).send({message:"Successfuly signIn"})
         }
-        const token=jwt.sign({id:user.userId},"thisji is mr setddsdf",{expiresIn:123})
+        const token=jwt.sign({id:user.userId},secret.secretKey,{expiresIn:123})
         console.log(token)
    res.status(200).send({
        name:user.name,
